@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -76,62 +77,92 @@ public class MainDynamicActivity extends ActionBarActivity implements View.OnTou
     {
         x = motionEvent.getX();
         y = motionEvent.getY();
-        //TODO
-        //draws the icon to the panel
-        TextView tv = new TextView(this);
-        ImageView iv = new ImageView(this);
-        iv.setImageResource(R.drawable.question);
+        final EditText tv = new EditText(this);
+        tv.setFocusableInTouchMode(true);
+        /*tv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                //TODO set editing option pop up
+                tv.setText("Horray!!!");
+            }
+        });*/
         RelativeLayout.LayoutParams params;
-        params = new RelativeLayout.LayoutParams(50, 50);
+        params = new RelativeLayout.LayoutParams(600, 50);
+
+        //TODO change so that an editing option pops up
+        if(modifier == "question")
+        {
+            tv.setHint("add question here");
+        }
+        else if(modifier == "answer")
+        {
+            tv.setHint("add answer here");
+        }
+        else
+        {
+            tv.setHint("add text here");
+        }
         params.leftMargin = (int) x;
         params.topMargin = (int) y;
-        canvas.addView(iv, params);
+        canvas.addView(tv, params);
+        canvas.setOnTouchListener(null);
         return true;
     }
 
     public void makeNewQuestionImage()
     {
-        //TODO
-        //Creates a new ImageView object that is empty
-        ImageView blankQuestion = new ImageView(this);
+        final ImageButton blankQuestion = new ImageButton(this);
         //Adds the question icon to the view
         blankQuestion.setImageResource(R.drawable.question);
-        //Sets up the onTouch drag events
-        blankQuestion.setOnTouchListener(new View.OnTouchListener()
+
+        //Sets the view holder for the question to be able to be clicked
+        //TODO change to onTouchListener for the drag events
+        questionHolder.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent)
+            public void onClick(View view)
             {
-                //TODO make this code dynamic
-                modifier = "question";
-                /*not used yet
-                switch(motionEvent.getAction())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                        //not used yet
-                        x = motionEvent.getX();
-                        y = motionEvent.getY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        //TODO call drag events
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        x = motionEvent.getX();
-                        y = motionEvent.getY();
-                        break;
-                }*/
-                return true;
+                setModifier("question");
+                setCanvasOnAndOff("on");
             }
         });
-        //place the new image view inside of the question holder
     }
 
     public void makeNewAnswerImage()
     {
-        //TODO
-        //create a new image view inside of the question holder
-        //set the ID to be "question"[next number]
-        //set the field to be draggable
-        //set the onDrag events
+        //Creates a new ImageView object that is empty
+        ImageView answerQuestion = new ImageView(this);
+        //Adds the question icon to the view
+        answerQuestion.setImageResource(R.drawable.question);
+
+        //Sets the view holder for the question to be able to be clicked
+        answerHolder.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                setModifier("answer");
+                setCanvasOnAndOff("on");
+            }
+        });
+    }
+
+    public void setModifier(String m)
+    {
+        modifier = m;
+    }
+
+    public void setCanvasOnAndOff(String s)
+    {
+        if (s == "on")
+        {
+            canvas.setOnTouchListener(this);
+        }
+        else
+        {
+            canvas.setOnTouchListener(null);
+        }
     }
 }
