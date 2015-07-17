@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class Entity
 {
-    ArrayList<Link<Entity, Entity>> linksFromThisNode;
-    ArrayList<Link<Entity, Entity>> linksToThisNode;
+    ArrayList<Link<Entity, Entity>> linksFromThisNode = new ArrayList<>();
+    ArrayList<Link<Entity, Entity>> linksToThisNode = new ArrayList<>();
 
     public void receiveLink(Link<Entity, Entity> link)
     {
